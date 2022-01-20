@@ -1,6 +1,7 @@
 import random
 
-wod = 'SHIRE'
+#TODO play with feedback from player/wordle itself
+#wod = 'SHIRE'
 
 correct_letters = {}
 semi_correct_letters = []
@@ -13,43 +14,57 @@ with open ('5_words.txt', 'r') as f:
 
 for i in range (99):
     guess = random.choice(word_bank)
+    print("Try: " + str(i+1))
     print(guess)
-    if guess == wod:
-        print(i)
-        break
-    else:
-        for i in range(5):
-            print("Guess letter: " + guess[i] + " wod letter: " + wod[i])
-            if guess[i] == wod[i]:
-                print("Correct letter!")
-                #correct_letters = {i: guess[i]}
-                correct_letters = {guess[i]: i}
-                print(correct_letters)
-            elif guess[i] in wod:
-                print("Semi Correct letter!")
-                if guess[i] not in semi_correct_letters:
-                    semi_correct_letters.append(guess[i])
-                print(semi_correct_letters)
-            else:
-                print("Incorrect letter!")
-                if guess[i] not in incorrect_letters:
-                    incorrect_letters.append(guess[i])
-                print(incorrect_letters)
+    print("Input feedback from wordle..\nA = absent\nC = correct\nP = present")
+    feedback = input().upper()
+    for i in range(5):
+        if feedback[i] == 'A':
+            incorrect_letters.append(guess[i])
+        elif feedback[i] == 'P':
+            semi_correct_letters.append(guess[i])
+        else:
+            correct_letters[guess[i]] = i
+
+    print("Absent: " + str(incorrect_letters))
+    print("Present: " + str(semi_correct_letters))
+    print("Correct: " + str(correct_letters))
+    #if guess == wod:
+    #    print(i)
+    #    break
+    #else:
+    #    for i in range(5):
+    #        print("Guess letter: " + guess[i] + " wod letter: " + wod[i])
+    #        if guess[i] == wod[i]:
+    #            print("Correct letter!")
+    #            #correct_letters = {i: guess[i]}
+    #            correct_letters = {guess[i]: i}
+    #            print(correct_letters)
+    #        elif guess[i] in wod:
+    #            print("Semi Correct letter!")
+    #            if guess[i] not in semi_correct_letters:
+    #                semi_correct_letters.append(guess[i])
+    #            print(semi_correct_letters)
+    #        else:
+    #            print("Incorrect letter!")
+    #            if guess[i] not in incorrect_letters:
+    #                incorrect_letters.append(guess[i])
+    #            print(incorrect_letters)
 
     #Trim word bank
-    word_bank_copy = word_bank
+    word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
         for letter in correct_letters.keys():
             print("Correct letter loop... " + letter)
-            print(letter)
-            print(correct_letters[letter])
+            #print(letter)
+            #print(correct_letters[letter])
             if letter != word[correct_letters[letter]]:
                 print("Removing " + word + " due to " + letter)
                 word_bank.remove(word)
                 break
             else:
                 print("Keeping " + word)
-    word_bank_copy = word_bank
+    word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
         for letter in semi_correct_letters:
             print("Semi correct letter loop... " + letter)
@@ -59,7 +74,7 @@ for i in range (99):
                 break
             else:
                 print("Keeping " + word)
-    word_bank_copy = word_bank
+    word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
         for letter in incorrect_letters:
             print("incorrect letter loop... " + letter)
@@ -69,5 +84,3 @@ for i in range (99):
                 break
             else:
                 print("Keeping " + word)
-
-print("Guess is: " + guess + " Word was: " + wod)
