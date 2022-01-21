@@ -4,7 +4,6 @@ import random
 #wod = 'SHIRE'
 
 correct_letters = {}
-#semi_correct_letters = []
 semi_correct_letters = {}
 incorrect_letters = []
 guess = ""
@@ -19,13 +18,12 @@ for i in range (99):
     guess = random.choice(word_bank)
     print("Try: " + str(i+1))
     print(guess)
-    print("Input feedback from wordle..\nA = absent\nC = correct\nP = present")
+    print("Input feedback from wordle..\nA = absent(Gray)\nC = correct(Green)\nP = present(Yellow)")
     feedback = input().upper()
     for i in range(5):
         if feedback[i] == 'A':
             incorrect_letters.append(guess[i])
         elif feedback[i] == 'P':
-            #semi_correct_letters.append(guess[i])
             semi_correct_letters[guess[i]] = i
         else:
             correct_letters[guess[i]] = i
