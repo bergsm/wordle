@@ -1,5 +1,10 @@
 A simple wordle solver.
 
-Run `python wordle.py` in a terminal.
+This branch will open a browser and solve wordle automatically there.
 
-Type the suggested word into wordle and provide the feedback from wordle to the program. Rinse and repeat until solved :)
+Run `python wordle.py` in a terminal and watch the magic.
+
+Does have dependencies (Note this is not an exhaustive list, will update with a requirements file.):
+Firefox
+Selenium Python module
+Pyshadow Python module
