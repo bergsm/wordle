@@ -15,7 +15,14 @@ with open ('5_words.txt', 'r') as f:
 for i in range (99):
 
     print("Words remaining in word bank:" + str(len(word_bank)))
+    #Uncomment this block to specify a first word of your choosing and comment out the line below
+    #if i == 0:
+    #    guess = "ARISE"
+    #else:
+    #    guess = random.choice(word_bank)
+
     guess = random.choice(word_bank)
+
     print("Try: " + str(i+1))
     print(guess)
     print("Input feedback from wordle..\nA = absent(Gray)\nC = correct(Green)\nP = present(Yellow)")
