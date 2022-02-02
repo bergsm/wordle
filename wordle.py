@@ -13,8 +13,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from pyshadow.main import Shadow
 import pyshadow
 
-#TODO play with feedback from player/wordle itself
-#wod = 'SHIRE'
 
 #Go to wordle page
 driver = webdriver.Firefox()
@@ -35,11 +33,11 @@ with open ('5_words.txt', 'r') as f:
     word_bank = [word.strip().upper() for word in word_bank]
 
 
-
+# Six guesses
 for i in range (6):
 
-    #print("Words remaining in word bank:" + str(len(word_bank)))
-    #Uncomment this block to specify a first word of your choosing and comment out the line below
+    print("Words remaining in word bank:" + str(len(word_bank)))
+    #Uncomment this block to specify a first word of your choosing and comment out the line "guess = random.choice(word_bank)" below
     #if i == 0:
     #    guess = "ARISE"
     #else:
@@ -64,6 +62,7 @@ for i in range (6):
     num_correct_letters = 0
 
 
+    #Calculate feedback from wordle
     for j in range(5):
         wordle_letter = shadow.find_element('#board > game-row:nth-child('+str(i+1)+') > game-tile:nth-child('+str(j+1)+')')
 
@@ -104,6 +103,7 @@ for i in range (6):
             else:
                 #print("Keeping " + word)
                 pass
+
     #Semicorrect letter pruning
     word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
@@ -120,6 +120,7 @@ for i in range (6):
             else:
                 #print("Keeping " + word)
                 pass
+
     #incorrect letter pruning
     word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
