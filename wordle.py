@@ -19,7 +19,7 @@ driver = webdriver.Firefox()
 actions = ActionChains(driver)
 driver.get("https://www.powerlanguage.co.uk/wordle/")
 time.sleep(2)
-#Exit help screen
+#Exit wordle help screen
 actions.move_by_offset(10,10).click().perform()
 
 
@@ -28,6 +28,8 @@ semi_correct_letters = {}
 incorrect_letters = []
 guess = ""
 
+
+#Use provided word bank
 with open ('5_words.txt', 'r') as f:
     word_bank = f.readlines()
     word_bank = [word.strip().upper() for word in word_bank]
@@ -43,8 +45,8 @@ for i in range (6):
     #else:
     #    guess = random.choice(word_bank)
 
+    #Choose a random remaining word from word bank
     guess = random.choice(word_bank)
-
     print("Try: " + str(i+1))
     print(guess)
 
@@ -53,24 +55,19 @@ for i in range (6):
     for char in guess:
         actions.send_keys(char).perform()
         time.sleep(0.5)
-
     actions.send_keys(Keys.RETURN).perform()
     time.sleep(2)
 
+    #Need this to access shadow DOM
     shadow = pyshadow.main.Shadow(driver)
-
-    num_correct_letters = 0
 
 
     #Calculate feedback from wordle
+    num_correct_letters = 0
     for j in range(5):
         wordle_letter = shadow.find_element('#board > game-row:nth-child('+str(i+1)+') > game-tile:nth-child('+str(j+1)+')')
 
-        #print("Wordle letter: " + str(wordle_letter.text))
-
         feedback = wordle_letter.get_attribute('evaluation')
-        #print("Guess: " + str(guess[j]))
-        #print(feedback)
 
         if feedback == 'absent':
             incorrect_letters.append(guess[j])
@@ -84,54 +81,39 @@ for i in range (6):
         print("Word guessed!")
         exit(0)
 
-    #print("Absent: " + str(incorrect_letters))
-    #print("Present: " + str(semi_correct_letters))
-    #print("Correct: " + str(correct_letters))
 
-    #Trim word bank
+    #Prune word bank
     word_bank_copy = word_bank.copy()
     #Correct letter pruning
     for word in word_bank_copy:
         for letter in correct_letters.keys():
-            #print("Correct letter loop... " + letter)
-            #print(letter)
-            #print(correct_letters[letter])
             if letter != word[correct_letters[letter]]:
-                #print("Removing " + word + " due to " + letter)
                 word_bank.remove(word)
                 break
             else:
-                #print("Keeping " + word)
                 pass
 
     #Semicorrect letter pruning
     word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
         for letter in semi_correct_letters.keys():
-            #print("Semi correct letter loop... " + letter)
             if letter not in word:
-                #print("Removing " + word + " due to " + letter)
                 word_bank.remove(word)
                 break
             if letter == word[semi_correct_letters[letter]]:
-                #print("Removing " + word + " due to " + letter)
                 word_bank.remove(word)
                 break
             else:
-                #print("Keeping " + word)
                 pass
 
     #incorrect letter pruning
     word_bank_copy = word_bank.copy()
     for word in word_bank_copy:
         for letter in incorrect_letters:
-            #print("incorrect letter loop... " + letter)
             if letter in word and letter not in semi_correct_letters and letter not in correct_letters:
-                #print("Removing " + word + " due to " + letter)
                 word_bank.remove(word)
                 break
             else:
-                #print("Keeping " + word)
                 pass
 
     time.sleep(2)
